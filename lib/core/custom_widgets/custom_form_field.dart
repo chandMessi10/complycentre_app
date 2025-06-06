@@ -1,27 +1,38 @@
 import 'package:complycentre_app/core/theme/app_colors.dart';
 import 'package:complycentre_app/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomFormField extends StatefulWidget {
   const CustomFormField({
-    super.key,
     required this.hint,
-    this.obscurePassword,
     required this.controller,
+    super.key,
+    this.focusNode,
+    this.obscurePassword,
     this.validatorFn,
+    this.onTapFn,
+    this.suffixIcon,
+    this.isEnabled = true,
   });
 
   final String hint;
   final bool? obscurePassword;
   final TextEditingController controller;
   final String? Function(String?)? validatorFn;
+  final bool isEnabled;
+  final VoidCallback? onTapFn;
+  final FocusNode? focusNode;
+  final Widget? suffixIcon;
   @override
   State<CustomFormField> createState() => _CustomFormFieldState();
 }
 
 class _CustomFormFieldState extends State<CustomFormField> {
   bool obscurePassword = false;
+  ValueNotifier<bool> isFormFocused = ValueNotifier<bool>(false);
+
   void changePasswordVisibility() {
     setState(() {
       obscurePassword = !obscurePassword;
@@ -30,47 +41,77 @@ class _CustomFormFieldState extends State<CustomFormField> {
 
   @override
   void initState() {
-    super.initState();
     obscurePassword = widget.obscurePassword ?? false;
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.focusNode != null) {
+        widget.focusNode!.addListener(() {
+          isFormFocused.value = widget.focusNode!.hasFocus ? true : false;
+        });
+      }
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      obscureText: obscurePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: widget.validatorFn,
-      decoration: InputDecoration(
-        suffixIcon: widget.obscurePassword != null
-            ? IconButton(
-                onPressed: changePasswordVisibility,
-                icon: Icon(
-                  obscurePassword ? Icons.visibility_off : Icons.visibility,
-                ),
-              )
-            : null,
-        contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 9.5.h),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.lightGray),
-          borderRadius: BorderRadius.circular(8.r),
+    return ValueListenableBuilder(
+      valueListenable: isFormFocused,
+      builder: (context, value, child) => TextFormField(
+        enabled: widget.isEnabled,
+        controller: widget.controller,
+        focusNode: widget.focusNode,
+        obscureText: obscurePassword,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: widget.validatorFn,
+        style: AppTextStyles.bodyText(context),
+        decoration: InputDecoration(
+          suffixIconConstraints: BoxConstraints(
+            maxWidth: 32.w,
+            maxHeight: 24.h,
+          ),
+          suffixIcon: Padding(
+            padding: EdgeInsets.only(right: 8.w),
+            child: widget.obscurePassword != null
+                ? IconButton(
+                    style: IconButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: changePasswordVisibility,
+                    icon: Icon(
+                      obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      size: 24.r,
+                    ),
+                  )
+                : widget.suffixIcon,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 8.w,
+            vertical: 9.5.h,
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.borderColor),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.borderColor),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.primary),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.danger),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          hintText: widget.hint,
+          hintStyle: AppTextStyles.bodyText(
+            context,
+          ).copyWith(color: AppColors.tertiary),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.lightGray),
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary),
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.danger),
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        hintText: widget.hint,
-        hintStyle: AppTextStyles.bodyText(
-          context,
-        ).copyWith(color: AppColors.tertiary),
+
+        onTap: widget.onTapFn,
+        onTapOutside: (event) {
+          widget.focusNode?.unfocus();
+        },
       ),
     );
   }

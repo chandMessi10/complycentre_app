@@ -23,6 +23,9 @@ class AppTheme {
         ),
       ),
     ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+    ),
     textTheme: TextTheme(
       headlineLarge: TextStyle(
         fontFamily: 'Open Sans',

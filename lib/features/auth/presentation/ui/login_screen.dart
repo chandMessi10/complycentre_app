@@ -1,14 +1,17 @@
 import 'dart:developer';
 
+import 'package:complycentre_app/core/custom_widgets/custom_filled_button.dart';
 import 'package:complycentre_app/core/custom_widgets/custom_form_field.dart';
 import 'package:complycentre_app/core/extensions/build_context_extensions.dart';
 import 'package:complycentre_app/core/mixins/input_validation_mixins.dart';
+import 'package:complycentre_app/core/navigation/go_router.dart';
 import 'package:complycentre_app/core/theme/app_colors.dart';
 import 'package:complycentre_app/core/theme/app_text_styles.dart';
 import 'package:complycentre_app/core/utils/custom_sized_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -23,6 +26,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -85,38 +90,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       children: [
                         CustomFormField(
                           controller: _emailController,
+                          focusNode: _emailFocusNode,
                           hint: 'Email',
                           validatorFn: emailValidator,
                         ),
                         sizedBoxHeight(16.h),
                         CustomFormField(
                           controller: _passwordController,
+                          focusNode: _passwordFocusNode,
                           hint: 'Password',
                           obscurePassword: true,
                           validatorFn: passwordValidator,
                         ),
                         sizedBoxHeight(24.h),
-                        FilledButton(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                              AppColors.primary,
-                            ),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                                side: BorderSide(width: double.infinity),
-                              ),
-                            ),
-                            fixedSize: WidgetStateProperty.all<Size>(
-                              Size(context.mqSize.width, 40.h),
-                            ),
-                          ),
-                          onPressed: () {
+                        CustomFilledButton(
+                          width: context.mqSize.width,
+                          onBtnPressed: () {
                             // if (_formKey.currentState!.validate()) {}
                             log('email: ${_emailController.text.trim()}');
                             log('password: ${_passwordController.text.trim()}');
+                            context.goNamed(AppRoute.dashboard.name);
                           },
-                          child: Text('Login'),
+                          child: Text(
+                            'Login',
+                            style: AppTextStyles.h3(
+                              context,
+                            ).copyWith(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),
@@ -130,4 +130,3 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
   }
 }
-

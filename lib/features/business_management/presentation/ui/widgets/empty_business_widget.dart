@@ -37,19 +37,11 @@ class EmptyBusinessWidget extends ConsumerWidget {
             onBtnPressed: () {
               context.pushNamed(AppRoute.addBusiness.name);
             },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.add, size: 16.r, color: Colors.white),
-                sizedBoxWidth(8.w),
-                Text(
-                  'Create business',
-                  style: AppTextStyles.statusText(
-                    context,
-                  ).copyWith(color: Colors.white),
-                ),
-              ],
-            ),
+            iconWidget: Icon(Icons.add, size: 16.r, color: Colors.white),
+            label: 'Create business',
+            labelStyle: AppTextStyles.statusText(
+              context,
+            ).copyWith(color: Colors.white),
           ),
         ),
       ],

@@ -8,7 +8,7 @@ abstract class Business with _$Business {
   factory Business({
     required String officeName,
     required int teamCount,
-    required int locationCount,
+    required String address,
     String? imageUrl,
   }) = _Business;
 

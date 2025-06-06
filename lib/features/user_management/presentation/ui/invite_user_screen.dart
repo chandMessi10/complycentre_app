@@ -1,12 +1,12 @@
-import 'dart:developer';
-
 import 'package:complycentre_app/constants/app_assets.dart';
+import 'package:complycentre_app/constants/data.dart';
 import 'package:complycentre_app/core/custom_widgets/custom_filled_button.dart';
 import 'package:complycentre_app/core/custom_widgets/custom_form_field.dart';
 import 'package:complycentre_app/core/custom_widgets/dashboard_card.dart';
 import 'package:complycentre_app/core/theme/app_colors.dart';
 import 'package:complycentre_app/core/theme/app_text_styles.dart';
 import 'package:complycentre_app/core/utils/custom_sized_box.dart';
+import 'package:complycentre_app/features/user_management/presentation/ui/widget/user_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,25 +21,28 @@ class InviteUserScreen extends ConsumerStatefulWidget {
 }
 
 class _InviteUserScreenState extends ConsumerState<InviteUserScreen> {
+  late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _roleController;
   late TextEditingController _businessController;
   late FocusNode _emailFocusNode;
+  late FocusNode _nameFocusNode;
   final GlobalKey _roleGlobalKey = GlobalKey();
-
-  List<String> roles = ['Cleaner', 'Supervisor'];
 
   @override
   void initState() {
+    _nameController = TextEditingController();
     _emailController = TextEditingController();
     _roleController = TextEditingController();
     _businessController = TextEditingController();
     _emailFocusNode = FocusNode();
+    _nameFocusNode = FocusNode();
     super.initState();
   }
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _roleController.dispose();
     _businessController.dispose();
@@ -102,74 +105,77 @@ class _InviteUserScreenState extends ConsumerState<InviteUserScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 16.h),
-        child: DashboardCard(
-          child: Form(
-            child: Column(
-              children: [
-                CustomFormField(
-                  hint: 'Email address',
-                  controller: _emailController,
-                  focusNode: _emailFocusNode,
-                ),
-                sizedBoxHeight(16.h),
-                GestureDetector(
-                  onTapDown: (details) {
-                    log(details.toString());
-                    _showRolesDropDown(context, details);
-                  },
-                  child: CustomFormField(
-                    key: _roleGlobalKey,
-                    hint: 'Role',
-                    controller: _roleController,
-                    isEnabled: false,
-                    suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                  ),
-                ),
-                sizedBoxHeight(16.h),
-                CustomFormField(
-                  hint: 'Assigned business',
-                  controller: _businessController,
-                ),
-                sizedBoxHeight(24.h),
-                CustomFilledButton(
-                  onBtnPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 5.w,
-                    children: [
-                      SvgPicture.asset(
-                        AppAssets.addUserIcon,
-                        height: 24.h,
-                        width: 24.h,
-                        colorFilter: ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
+        child: CustomCard(
+          child: Column(
+            children: [
+              UserAvatar(isTappable: true, onTapFn: () {}),
+              sizedBoxHeight(24.h),
+              Form(
+                child: Column(
+                  children: [
+                    CustomFormField(
+                      hint: 'Name',
+                      controller: _nameController,
+                      focusNode: _nameFocusNode,
+                    ),
+                    sizedBoxHeight(16.h),
+                    CustomFormField(
+                      hint: 'Email address',
+                      controller: _emailController,
+                      focusNode: _emailFocusNode,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    sizedBoxHeight(16.h),
+                    GestureDetector(
+                      onTapDown: (details) =>
+                          _showRolesDropDown(context, details),
+                      child: CustomFormField(
+                        key: _roleGlobalKey,
+                        hint: 'Role',
+                        controller: _roleController,
+                        isEnabled: false,
+                        suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
                       ),
-                      Text(
-                        'Invite user',
+                    ),
+                    sizedBoxHeight(16.h),
+                    CustomFormField(
+                      hint: 'Assigned business',
+                      controller: _businessController,
+                    ),
+                    sizedBoxHeight(24.h),
+                    SizedBox(
+                      width: double.infinity,
+                      child: CustomFilledButton(
+                        onBtnPressed: () {},
+                        iconWidget: SvgPicture.asset(
+                          AppAssets.addUserIcon,
+                          height: 24.h,
+                          width: 24.h,
+                          colorFilter: ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        label: 'Invite user',
+                      ),
+                    ),
+
+                    sizedBoxHeight(20.h),
+                    GestureDetector(
+                      onTap: () {
+                        context.pop();
+                      },
+                      child: Text(
+                        'Cancel',
                         style: AppTextStyles.h3(
                           context,
-                        ).copyWith(color: Colors.white),
+                        ).copyWith(color: AppColors.brandText),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-
-                sizedBoxHeight(20.h),
-                GestureDetector(
-                  onTap: () {
-                    context.pop();
-                  },
-                  child: Text(
-                    'Cancel',
-                    style: AppTextStyles.h3(
-                      context,
-                    ).copyWith(color: AppColors.brandText),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

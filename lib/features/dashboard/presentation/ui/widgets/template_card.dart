@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:complycentre_app/constants/app_assets.dart';
+import 'package:complycentre_app/core/extensions/string_extenstions.dart';
 import 'package:complycentre_app/core/theme/app_colors.dart';
 import 'package:complycentre_app/core/theme/app_text_styles.dart';
 import 'package:complycentre_app/core/utils/custom_sized_box.dart';
@@ -9,12 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class TemplateCard extends StatelessWidget {
+class TemplateTile extends StatelessWidget {
   final String templateName;
   final String lastUpdated;
   final String? imageUrl;
 
-  const TemplateCard({
+  const TemplateTile({
     super.key,
     required this.templateName,
     required this.lastUpdated,
@@ -43,9 +44,7 @@ class TemplateCard extends StatelessWidget {
                   : null,
               child: imageUrl == null
                   ? Text(
-                      templateName.isNotEmpty
-                          ? templateName[0].toUpperCase()
-                          : '',
+                      templateName.getInitials(),
                       style: AppTextStyles.h3(
                         context,
                       ).copyWith(color: Colors.white),

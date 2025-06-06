@@ -52,7 +52,7 @@ class TemplatePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return DashboardCard(
+    return CustomCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         spacing: 16.h,
@@ -61,19 +61,11 @@ class TemplatePage extends ConsumerWidget {
             height: 36.h,
             child: CustomFilledButton(
               onBtnPressed: () {},
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.add, size: 16.r, color: Colors.white),
-                  sizedBoxWidth(8.w),
-                  Text(
-                    'Create report',
-                    style: AppTextStyles.statusText(
-                      context,
-                    ).copyWith(color: Colors.white),
-                  ),
-                ],
-              ),
+              iconWidget: Icon(Icons.add, size: 16.r, color: Colors.white),
+              label: 'Create report',
+              labelStyle: AppTextStyles.statusText(
+                context,
+              ).copyWith(color: Colors.white),
             ),
           ),
           Expanded(
@@ -83,7 +75,7 @@ class TemplatePage extends ConsumerWidget {
               separatorBuilder: (context, index) => sizedBoxHeight(16.h),
               itemBuilder: (context, index) {
                 final template = dummyTemplates[index];
-                return TemplateCard(
+                return TemplateTile(
                   templateName: template.templateName,
                   lastUpdated: template.lastUpdated,
                   imageUrl: template.imageUrl,

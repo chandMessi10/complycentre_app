@@ -37,19 +37,7 @@ class EmptyUserWidget extends ConsumerWidget {
             onBtnPressed: () {
               context.pushNamed(AppRoute.addBusiness.name);
             },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.add, size: 16.r, color: Colors.white),
-                sizedBoxWidth(8.w),
-                Text(
-                  'Invite user',
-                  style: AppTextStyles.statusText(
-                    context,
-                  ).copyWith(color: Colors.white),
-                ),
-              ],
-            ),
+            label: 'Invite user',
           ),
         ),
       ],

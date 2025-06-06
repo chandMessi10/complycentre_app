@@ -111,12 +111,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             log('password: ${_passwordController.text.trim()}');
                             context.goNamed(AppRoute.dashboard.name);
                           },
-                          child: Text(
-                            'Login',
-                            style: AppTextStyles.h3(
-                              context,
-                            ).copyWith(color: Colors.white),
-                          ),
+                          label: 'Login',
                         ),
                       ],
                     ),

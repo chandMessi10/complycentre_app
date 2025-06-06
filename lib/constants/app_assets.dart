@@ -9,8 +9,8 @@ class AppAssets {
   static const String locationOutlined = 'assets/icons/location_outlined.svg';
   static const String users = 'assets/icons/ph_users.svg';
   static const String addUserIcon = 'assets/icons/add_user_icon.svg';
-
   static const String uploadIcon = 'assets/icons/upload_icon.svg';
+  static const String saveIcon = 'assets/icons/save_icon.svg';
   static const String locationIcon = 'assets/icons/location_icon.svg';
 
   // images

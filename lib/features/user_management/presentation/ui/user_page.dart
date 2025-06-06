@@ -3,7 +3,7 @@ import 'package:complycentre_app/core/custom_widgets/dashboard_card.dart';
 import 'package:complycentre_app/core/navigation/go_router.dart';
 import 'package:complycentre_app/core/theme/app_text_styles.dart';
 import 'package:complycentre_app/core/utils/custom_sized_box.dart';
-import 'package:complycentre_app/features/dashboard/presentation/ui/widgets/user_tile.dart';
+import 'package:complycentre_app/features/user_management/presentation/ui/widget/user_tile.dart';
 import 'package:complycentre_app/features/user_management/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,7 +48,7 @@ class UserPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return DashboardCard(
+    return CustomCard(
       child:
           //  EmptyUserWidget(),
           Column(
@@ -61,19 +61,16 @@ class UserPage extends ConsumerWidget {
                   onBtnPressed: () {
                     context.pushNamed(AppRoute.inviteUser.name);
                   },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.add_rounded, size: 16.r, color: Colors.white),
-                      sizedBoxWidth(8.w),
-                      Text(
-                        'Invite user ',
-                        style: AppTextStyles.statusText(
-                          context,
-                        ).copyWith(color: Colors.white),
-                      ),
-                    ],
+                  iconWidget: Icon(
+                    Icons.add_rounded,
+                    size: 16.r,
+                    color: Colors.white,
                   ),
+
+                  label: 'Invite user ',
+                  labelStyle: AppTextStyles.statusText(
+                    context,
+                  ).copyWith(color: Colors.white),
                 ),
               ),
               Expanded(
@@ -89,6 +86,9 @@ class UserPage extends ConsumerWidget {
                       role: user.role,
                       isActive: user.isActive,
                       avatarUrl: user.avatarUrl,
+                      onTileTap: () {
+                        context.pushNamed(AppRoute.userDetail.name);
+                      },
                     );
                   },
                 ),

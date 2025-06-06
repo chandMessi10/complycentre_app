@@ -65,6 +65,5 @@ class DashboardTile extends StatelessWidget {
         ],
       ),
     );
-  
   }
 }

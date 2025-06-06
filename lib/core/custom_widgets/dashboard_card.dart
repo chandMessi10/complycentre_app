@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DashboardCard extends StatelessWidget {
-  const DashboardCard({super.key, required this.child});
+class CustomCard extends StatelessWidget {
+  const CustomCard({super.key, required this.child});
 
   final Widget child;
 

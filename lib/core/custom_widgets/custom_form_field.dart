@@ -14,6 +14,8 @@ class CustomFormField extends StatefulWidget {
     this.validatorFn,
     this.onTapFn,
     this.suffixIcon,
+    this.backgroundColor,
+    this.keyboardType = TextInputType.text,
     this.isEnabled = true,
   });
 
@@ -25,6 +27,8 @@ class CustomFormField extends StatefulWidget {
   final VoidCallback? onTapFn;
   final FocusNode? focusNode;
   final Widget? suffixIcon;
+  final Color? backgroundColor;
+  final TextInputType keyboardType;
   @override
   State<CustomFormField> createState() => _CustomFormFieldState();
 }
@@ -64,7 +68,10 @@ class _CustomFormFieldState extends State<CustomFormField> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: widget.validatorFn,
         style: AppTextStyles.bodyText(context),
+        keyboardType: widget.keyboardType,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: widget.backgroundColor ?? Colors.white,
           suffixIconConstraints: BoxConstraints(
             maxWidth: 32.w,
             maxHeight: 24.h,
@@ -87,6 +94,10 @@ class _CustomFormFieldState extends State<CustomFormField> {
             vertical: 9.5.h,
           ),
           border: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.borderColor),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          disabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.borderColor),
             borderRadius: BorderRadius.circular(8.r),
           ),
